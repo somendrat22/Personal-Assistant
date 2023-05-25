@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Personal Assistant",
+  "version": "1.0",
+  "description": "This extension is the service of our Personal Assistant Project helps to get better Mail Suggestions",
+  "permissions": [
+    "https://mail.google.com/*",
+    "https://web.whatsapp.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*",
+        "https://web.whatsapp.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icon.jpg"
+  }
+}
