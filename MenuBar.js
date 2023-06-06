@@ -1,19 +1,58 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AllChats from "./AllChats/AllChats.js";
 
 const MenuBar = () => {
+  const [courseGoal, setCourseGoal] = React.useState([]);
+  const [apiData, setApiData] = useState([]);
+  useEffect(async() => {
+    const x = await axios.get("http://localhost:8001/api/getallchats", {params:{uid:1}}); 
+    console.log(x);
+    setApiData(x.data);
+  }, []);
+  
+  const saveCourseGoalsToDynamoDB = () => {
+    setCourseGoal((currentCourseGoal) => [
+      ...currentCourseGoal,
+      { text: enteredGoal, id: Math.random().toString() },
+    ]);
+    setEnteredGoal("");
+  };
+
+  const data = [{convoName:"xyz", allConvo:[]}, {convoName:"tyz", allConvo:[]}, {convoName:"syz", allConvo:[]}, {convoName:"uyz", allConvo:[]}];
+
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={saveCourseGoalsToDynamoDB}
+        >
           <View style={styles.iconAndTextContainer}>
             <Icon name="plus" size={20} color="#000" />
             <Text style={styles.text}>New Chat</Text>
           </View>
         </TouchableOpacity>
+        <View style={styles.chatDisplay}>
+          {
+            apiData.length != 0 ? (<FlatList
+              data={apiData}
+              renderItem={(item) => {
+                return <AllChats data = {item.item}></AllChats>;
+              }}
+              keyExtractor={(item, index) => {
+                return item.id;
+              }}
+              alwaysBounceVertical={false}
+            />) : <></>
+          }
+          
+        </View>
       </View>
-      
+
       <View style={styles.container2}>
         <TouchableOpacity style={styles.showMoreButton}>
           <Text style={styles.title}>Show More</Text>
@@ -23,8 +62,8 @@ const MenuBar = () => {
             <Icon name="user" size={20} color="#000" />
             <Text style={styles.text}>Upgrade to Plus</Text>
             <TouchableOpacity style={styles.newButton}>
-          <Text style={styles.title}>NEW</Text>
-        </TouchableOpacity>
+              <Text style={styles.title}>NEW</Text>
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
@@ -64,7 +103,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   newButton: {
-    backgroundColor: '#ffdf00',
+    backgroundColor: "#ffdf00",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -85,6 +124,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+  chatDisplay : {
+    height : "90vh",
+    display : "flex",
+    justifyContent : "center",
+    zIndex : "0",
   },
 });
 

@@ -12,22 +12,30 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 
 import ChatBox from "./ChatBox"
 
 const ChatTextInput = () => {
   const [enteredGoalText, setEnteredGoalText] = React.useState("");
-  const [courseGoals, setCourseGoals] = React.useState([{text : "Hii", id : 1}]);
+  const [courseGoals, setCourseGoals] = React.useState([]);
   
-
   const goalInputHandler = (enteredGoalText) => {
     setEnteredGoalText(enteredGoalText);
   };
 
-  const addGoalHandler = () => {
+  const addGoalHandler = async() => {
+    const apiResp = await axios.get("http://localhost:8001/api/dochat", {
+      params : {
+        text : enteredGoalText
+      }
+      
+    })
+    console.log(apiResp.data[0].message.content);
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: Math.random().toString() },
+      { text : apiResp.data[0].message.content, id: Math.random().toString() },
     ]);
     setEnteredGoalText("");
   };
