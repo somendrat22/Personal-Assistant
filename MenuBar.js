@@ -2,15 +2,20 @@ import React from "react";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import {connect} from 'react-redux';
 import AllChats from "./AllChats/AllChats.js";
+import { Button } from "react-native-web";
+import { ListItem } from "@react-native-material/core";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
-const MenuBar = () => {
+
+
+const MenuBar = ({token , tokenGenerate, meetChat, meetChangeState}) => {
   const [courseGoal, setCourseGoal] = React.useState([]);
   const [apiData, setApiData] = useState([]);
   useEffect(async() => {
-    const x = await axios.get("http://localhost:8001/api/getallchats", {params:{uid:1}}); 
-    console.log(x);
+    const x = await axios.get("http://localhost:8081/api/getallchats", {params:{uid:1}}); 
+    tokenGenerate(x.data);
     setApiData(x.data);
   }, []);
   
@@ -21,8 +26,6 @@ const MenuBar = () => {
     ]);
     setEnteredGoal("");
   };
-
-  const data = [{convoName:"xyz", allConvo:[]}, {convoName:"tyz", allConvo:[]}, {convoName:"syz", allConvo:[]}, {convoName:"uyz", allConvo:[]}];
 
   return (
     <View style={styles.container}>
@@ -65,6 +68,13 @@ const MenuBar = () => {
               <Text style={styles.title}>NEW</Text>
             </TouchableOpacity>
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <ListItem title="Generate Meeting"
+                  leading={<Icon name="email-open" size={24} />}
+                  trailing={props => <Icon name="chevron-right" {...props} />}
+                  onPress = {meetChangeState(meetChat)}
+          ></ListItem>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <Text>User Name</Text>
@@ -133,4 +143,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuBar;
+
+const mapStateToProps = state =>({
+  token : state.token, 
+  meetChat : state.meetChat
+})
+
+const mapDispatchToProps = dispatch => ({
+  tokenGenerate: (apiToken) => dispatch({ type: 'UPDATETOKEN', payload :  apiToken}),
+  meetChangeState : (meetChat) => dispatch({type : 'UpdateChat', payload : (meetChat ? false : true)})
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuBar);

@@ -13,8 +13,8 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-
 import ChatBox from "./ChatBox"
+import Meeting from "./Components/Meetings/Meeting";
 
 const ChatTextInput = () => {
   const [enteredGoalText, setEnteredGoalText] = React.useState("");
@@ -25,7 +25,7 @@ const ChatTextInput = () => {
   };
 
   const addGoalHandler = async() => {
-    const apiResp = await axios.get("http://localhost:8001/api/dochat", {
+    const apiResp = await axios.get("http://localhost:8081/api/dochat", {
       params : {
         text : enteredGoalText
       }
@@ -41,9 +41,9 @@ const ChatTextInput = () => {
   };
 
   return (
-    //<SafeAreaView style={{ flex: 1 }}>
+    
     <View style={{ flex: 1 }}>
-      {/*<ScrollView>{courseGoals.map((goal) => <Text style={styles.heading} key={goal}> {goal}</Text>)}</ScrollView>*/}
+      
       <View style = {styles.chatDisplay}>
         <FlatList 
           data={courseGoals}
@@ -72,14 +72,12 @@ const ChatTextInput = () => {
             placeholder="Type your message.."
             value={enteredGoalText}
           />
-          {/* <View style={styles.iconContainer}>
-            <Icon name="telegram" size={30} color="#000" />
-          </View> */}
           <Button title="Send message" onPress={addGoalHandler}></Button>
+
         </View>
       </View>
     </View>
-    //</SafeAreaView>
+    
   );
 };
 
