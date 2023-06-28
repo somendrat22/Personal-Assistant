@@ -1,18 +1,19 @@
 const initialState = {
-    meetChat : false
+    meetState : 0
 }
-
 
 const meetStateReducer = (state = initialState, action) => {
-    if(action.type == 'UpdateChat'){
-        console.log(action.payload)
+    
+    if(action.type =  'UpdateMeetState'){
         return {
             ...state, 
-            meetChat : action.payload
+            meetState : state.meetState + 1
         }
     }
-    
+
     return state;
 }
+
+
 
 export default meetStateReducer;

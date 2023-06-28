@@ -10,7 +10,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 
 
-const MenuBar = ({token , tokenGenerate, meetChat, meetChangeState}) => {
+const MenuBar = ({token , tokenGenerate, meetState, updateMeetState}) => {
   const [courseGoal, setCourseGoal] = React.useState([]);
   const [apiData, setApiData] = useState([]);
   useEffect(async() => {
@@ -73,7 +73,7 @@ const MenuBar = ({token , tokenGenerate, meetChat, meetChangeState}) => {
           <ListItem title="Generate Meeting"
                   leading={<Icon name="email-open" size={24} />}
                   trailing={props => <Icon name="chevron-right" {...props} />}
-                  onPress = {meetChangeState(meetChat)}
+                  onPress = {updateMeetState}
           ></ListItem>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
@@ -145,13 +145,14 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = state =>({
-  token : state.token, 
-  meetChat : state.meetChat
+  token : state.token,
+  meetState : state.meetState
 })
 
 const mapDispatchToProps = dispatch => ({
   tokenGenerate: (apiToken) => dispatch({ type: 'UPDATETOKEN', payload :  apiToken}),
-  meetChangeState : (meetChat) => dispatch({type : 'UpdateChat', payload : (meetChat ? false : true)})
+  updateMeetState : () => dispatch({type : 'UpdateMeetState'})
+  
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuBar);
