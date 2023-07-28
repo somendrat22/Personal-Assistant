@@ -8,9 +8,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { connect } from 'react-redux';
 
 
-const MeetingChat = () => {
+const MeetingChat = ({meetChat, updateMeetChat}) => {
+  console.log(meetChat);
   const [stage, updateStage] = useState(1);
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState([{ user : "Assistant", text : "Hey, Welcome to the zoom meet generation chat", topic : 'Zoom/Topic'},
+  {user : "Assistant", text : "What is the topic of your meeting ?", topic : 'Zoom/Topic'}]);
   const [newMessage, setNewMessage] = useState("");
   const [showDateModal, setDateModal] = React.useState(false);
   const [showTimeModal, setTimeModal] = React.useState(false);
@@ -18,12 +20,6 @@ const MeetingChat = () => {
   const [minute, setMinute] = React.useState(undefined);
   const [email, setEmail] = React.useState(undefined);
   const [zoomTopic, setZoomTopic] = React.useState("");
-  
-
-  useEffect(() => {
-    setMessages([{ user : "Assistant", text : "Hey, Welcome to the zoom meet generation chat", topic : 'Zoom/Topic'},
-    {user : "Assistant", text : "What is the topic of your meeting ?", topic : 'Zoom/Topic'}]);
-  }, [])
 
   const handleTimeClick = () => {
     setTimeModal(true);
@@ -99,9 +95,10 @@ const MeetingChat = () => {
           text : `Please provide date when you want to schedule your meeting.`,
           topic : 'Date'
         }
-        const updatedMessage = [...messages, mssg, resp1, resp2];
+        const updatedMessage = [...meetChat.meetChat, mssg, resp1, resp2];
         setZoomTopic(newMessage);
         setMessages(updatedMessage);
+        // updateMeetChat(updatedMessage);
         updateStage(2);
         setNewMessage('');
       }else if(stage == 3){
@@ -405,13 +402,11 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state =>({
-  token : state.token,
-  meetState : state.meetState
+   meetChat : state.meetChat
 })
 
 const mapDispatchToProps = dispatch => ({
-  tokenGenerate: (apiToken) => dispatch({ type: 'UPDATETOKEN', payload :  apiToken}),
-  updateMeetState : () => dispatch({type : 'UpdateMeetState'})
+  updateMeetChat : (meetChat) => dispatch({type : 'UpdateZoomChat', payload : meetChat})
 })
   
 

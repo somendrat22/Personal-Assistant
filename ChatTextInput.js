@@ -14,7 +14,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import ChatBox from "./ChatBox"
-import Meeting from "./Components/Meetings/Meeting";
+
 
 const ChatTextInput = () => {
   const [enteredGoalText, setEnteredGoalText] = React.useState("");
@@ -34,8 +34,8 @@ const ChatTextInput = () => {
     console.log(apiResp.data[0].message.content);
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      { text: enteredGoalText, id: Math.random().toString() },
-      { text : apiResp.data[0].message.content, id: Math.random().toString() },
+      { text: enteredGoalText, id: Math.random().toString(), user : "user" },
+      { text : apiResp.data[0].message.content, id: Math.random().toString(), user : "Assistant" },
     ]);
     setEnteredGoalText("");
   };

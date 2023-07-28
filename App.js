@@ -5,7 +5,6 @@ import ChatTextInput from "./ChatTextInput";
 import MenuBar from "./MenuBar";
 import store from "./Redux/Store/store";
 import { Provider, useSelector} from "react-redux";
-import Meeting from "./Components/Meetings/Meeting";
 import MeetingChat from "./Components/Meetings/MeetingChat";
 import BackgroundChat from "./Components/BackgroundChat/BackGroundChat";
 
