@@ -1,0 +1,39 @@
+.right-half-container{
+    height: 100%;
+    width: 50%;
+}
+
+.background{
+    color: green;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.login-container{
+    margin: 10%;
+    height: 60%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.login-textfield{
+    width: 100%;
+    height: 30%;
+}
+
+video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.right-half-container{
+    position: absolute;
+}
