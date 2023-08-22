@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const AWS = require('aws-sdk');
+const jwt = require('jsonwebtoken');
+const secretKey = "Somendrat22";
 
 AWS.config.update({
     region : 'ap-south-1',
@@ -17,7 +19,6 @@ router.post('/', async(req, res) => {
         const userName = req.body.UserName;
         const email = req.body.Email;
         const pass = req.body.Password;
-        console.log(req.body);
         console.log(JSON.stringify({
             UserID : {S : uniqueUserId},
             UserName : {S : userName},
@@ -60,13 +61,21 @@ router.post('/', async(req, res) => {
             if(error){
                 res.status(500).send(error);
             }else{
+
+                const user = {
+                    UserID : {S : uniqueUserId},
+                    UserName : {S : userName},
+                    Email : {S : email},
+                    ChatBotConvo : chatBotConvo,
+                    Password : {S : pass}
+                }
+
+                user.exp = Math.floor(Date.now() / 1000) + 3600;
+                const token = jwt.sign(user, secretKey);
+                
                 res.status(201).send(
                     {
-                        UserID : {S : uniqueUserId},
-                        UserName : {S : userName},
-                        ChatBotConvo : chatBotConvo,
-                        Email : {S : email},
-                        Password : {S : pass}
+                       "token" : token
                     }
                 )
             }
