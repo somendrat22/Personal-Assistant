@@ -7,12 +7,16 @@ import Button from '@mui/material/Button';
 import './SignUp.css';
 import Video_Bg from '../../Assets/Bg_Video.mp4';
 import { redirect, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function SignUp(props) {
     const navigate = useNavigate();
+    const handleRegisterButton = async () => {
+        const data = await axios.post()
+    }
     return (
         <div className='background'>
-        
+
         <video src = {Video_Bg} autoPlay loop muted></video>
         <div className = 'right-half-container'>
              <Card className='login-container'>
