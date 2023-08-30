@@ -3,6 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const nodemailer = require("nodemailer");
+
+
 
 // Provide the required configuration
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
@@ -118,9 +121,9 @@ router.post('/', async (req, res) => {
     let summary = req.body.summary;
     let startTime = req.body.startTime;
     let endTime = req.body.endTime;
-
+    const string = JSON.stringify(req.body);
     try{
-        const queryText = `generate meeting notes for the meeting having description as ${description} and summary as ${summary} and keep it without variables `;
+        const queryText = `generate meeting notes for the meeting having description as per following json ${string} `;
         const genAiResp = await axios.get("http://localhost:8081/api/dochat", {
             params : {
                 text : queryText
@@ -136,7 +139,7 @@ router.post('/', async (req, res) => {
         let event = {
             'summary': description,
             'location' : req.body.location,
-            'attendees' : req.body.attendees,
+            
             'description': summary,
             'start': {
                 'dateTime': startTime,
@@ -160,6 +163,30 @@ router.post('/', async (req, res) => {
 
         const ans = await insertEvent(event);
         console.log(ans);
+
+        const transporter = nodemailer.createTransport({
+            service : "Gmail",
+            auth : {
+                user : 'somtechie22@gmail.com',
+                pass : 'qixjhrzcqqcnvjfa'
+            }
+        })
+
+        const sendEmail = async () => {
+            try {
+                const info = await transporter.sendMail({
+                  from: "somtechie22@gmail.com",
+                  to: req.body.attendees[0].email,
+                  subject: req.body.summary,
+                  text: summary,
+                });
+            
+                console.log("Email sent:", info.response);
+              } catch (error) {
+                console.error("Error sending email:", error);
+              }
+        }
+        sendEmail();
         res.status(200).send({ans})
     }catch(err){
         res.status(500).send(err);
