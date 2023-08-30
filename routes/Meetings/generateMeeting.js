@@ -11,7 +11,9 @@ const convertTime = (timeStr) => {
 
 
 router.get("/", async(req, res) => {
-    const date = new Date(req.body.startTime);
+    
+
+    const date = new Date(req.query.startTime);
 
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -21,15 +23,15 @@ router.get("/", async(req, res) => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
 
    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    console.log(req.body);
+   console.log(req.params);
     try{
         const meetingdetails = {
-                  "topic": req.body.summary,
+                  "topic": req.query.summary,
                   "type": 2,
                   "start_time": formattedDateTime,
                   "duration": "45",
                   "timezone": "Europe/Madrid",
-                  "agenda": req.body.description,
+                  "agenda": req.query.description,
                   "recurrence": {"type": 1,
                                  "repeat_interval": 1
                                  },
