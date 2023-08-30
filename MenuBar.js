@@ -62,11 +62,7 @@ const MenuBar = ({token , tokenGenerate, meetState, updateMeetState}) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <View style={styles.iconAndTextContainer}>
-            <Icon name="user" size={20} color="#000" />
-            <Text style={styles.text}>Upgrade to Plus</Text>
-            <TouchableOpacity style={styles.newButton}>
-              <Text style={styles.title}>NEW</Text>
-            </TouchableOpacity>
+            <Text style={styles.text}>My Calendar</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>

@@ -126,22 +126,42 @@ const MeetingChat = ({meetChat, updateMeetChat}) => {
         const originalDate = new Date(date);
         originalDate.setHours(hour);
         originalDate.setMinutes(minute);
-        const reqBody  = {
-          startDate : originalDate,
-          email : newMessage, 
-          topic : zoomTopic
+        const endDate = new Date(date);
+        endDate.setHours(hour + 1);
+        endDate.setMinutes(minute);
+        console.log(endDate);
+        let reqBody  = {
+          description : zoomTopic, 
+          summary : zoomTopic, 
+          startTime : originalDate,
+          endTime : endDate
         }
         const headers = {
-          token : token.data.access_token,
+          authorization : token.data.access_token,
         }
 
-        const meetingData = await axios.post("http://localhost:8081/api/meeting/generateMeeting", reqBody, {
+        console.log(reqBody);
+
+        const meetingData = await axios.get("http://localhost:8081/api/meeting/createmeeting", {
+          params : reqBody,
           headers : headers
         })
 
-        console.log(meetingData.data)
+        reqBody.location = meetingData.data.join_url;
+        reqBody.attendees = [{
+          "email" : newMessage, 
+          
+        }]
+        const data = await axios.post("http://localhost:8082/calendar/insertevent", reqBody);
 
-        setMessages([...messages, userEmail, emailMssg, generateMeet, {user : "Assistant", text : meetingData.data.start_url, topic : "ZoomLink"}]);
+
+
+
+
+
+       // console.log(meetingData.data)
+
+       // setMessages([...messages, userEmail, emailMssg, generateMeet, {user : "Assistant", text : meetingData.data.start_url, topic : "ZoomLink"}]);
         
         
         setNewMessage('');
